@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "mkdir -p public/uploads && next build",
     "start": "next start",
     "lint": "next lint"
   },
