@@ -13,6 +13,9 @@ export async function POST(request: NextRequest) {
   const outputDir = path.join(uploadsDir, Date.now().toString());
   await fs.ensureDir(outputDir);
 
+  // Path to the downloaded protoc binary
+  const protocPath = path.join(process.cwd(), 'vendor', 'protoc', 'bin', 'protoc');
+
   try {
     // Get form data
     const formData = await request.formData();
@@ -29,7 +32,7 @@ export async function POST(request: NextRequest) {
     await fs.writeFile(filePath, buffer);
 
     // Run protoc command with explicit proto_path
-    const command = `protoc \
+    const command = `${protocPath} \
       --proto_path=${outputDir} \
       --js_out=import_style=commonjs:${outputDir} \
       --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:${outputDir} \
