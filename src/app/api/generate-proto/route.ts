@@ -13,7 +13,6 @@ export async function POST(request: NextRequest) {
   const outputDir = path.join(uploadsDir, Date.now().toString());
   await fs.ensureDir(outputDir);
 
-  // Path to the downloaded protoc binary
   const protocPath = path.join(process.cwd(), 'vendor', 'protoc', 'bin', 'protoc');
 
   try {
