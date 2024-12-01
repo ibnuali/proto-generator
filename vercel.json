@@ -1,4 +1,12 @@
 {
+    "functions": {
+      "api/**/*.ts": {
+        "includeFiles": [
+          "vendor/protoc/**",
+          "public/uploads/**"
+        ]
+      }
+    },
     "routes": [
       {
         "src": "/api/generate-proto",
