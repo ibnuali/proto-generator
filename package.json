@@ -6,9 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "vercel-build": "node download-protoc.js && npm install -g protoc-gen-grpc-web && next build",
-    "download:protoc": "node download-protoc.js"
+    "lint": "next lint"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.12.2",
