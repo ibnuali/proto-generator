@@ -8,10 +8,8 @@ const execAsync = promisify(exec);
 
 export async function POST(request: NextRequest) {
   // Ensure uploads directory exists
-  const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
-  await fs.ensureDir(uploadsDir);
-  const outputDir = path.join(uploadsDir, Date.now().toString());
-  await fs.ensureDir(outputDir);
+  const uploadsDir = path.join('/tmp', 'uploads', Date.now().toString());
+  await fs.mkdirp(uploadsDir);
 
   const protocPath = path.join(process.cwd(), 'vendor', 'protoc', 'bin', 'protoc');
 
@@ -25,23 +23,23 @@ export async function POST(request: NextRequest) {
     }
 
     // Save file
-    const bytes = await file.arrayBuffer();
+   const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const filePath = path.join(outputDir, file.name);
+    const filePath = path.join(uploadsDir, file.name);
     await fs.writeFile(filePath, buffer);
 
     // Run protoc command with explicit proto_path
     const command = `${protocPath} \
-      --proto_path=${outputDir} \
-      --js_out=import_style=commonjs:${outputDir} \
-      --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:${outputDir} \
+      --proto_path=${uploadsDir} \
+      --js_out=import_style=commonjs:${uploadsDir} \
+      --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:${uploadsDir} \
       ${file.name}`;
 
     // Execute protoc command in the output directory
-    const { stdout, stderr } = await execAsync(command, { cwd: outputDir });
+    const { stdout, stderr } = await execAsync(command, { cwd: uploadsDir });
 
     // Get list of generated files
-    const generatedFiles = await fs.readdir(outputDir);
+    const generatedFiles = await fs.readdir(uploadsDir);
     const nonOriginalFiles = generatedFiles.filter(f => 
       path.extname(f) !== '.proto' && 
       f !== file.name
