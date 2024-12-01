@@ -1,14 +1,4 @@
 {
-    "builds": [
-      {
-        "src": "download-protoc.js",
-        "use": "@vercel/node"
-      },
-      {
-        "src": "package.json",
-        "use": "@vercel/next"
-      }
-    ],
     "routes": [
       {
         "src": "/api/generate-proto",
